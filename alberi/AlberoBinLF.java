@@ -94,18 +94,15 @@ public class AlberoBinLF<T> extends AlberoLF<T> implements AlberoBin<T> {
 			while (dir != STOP) {
 				switch (dir) {
 				case DES:
-					if (curr.des() == null) {
-						dir = SU;
-					} else {
+					if (curr.des() == null) dir = SU;
+					else {
 						curr = curr.des();
 						dir = SIN;
 					}
 					break;
 				case SIN:
-					if (curr.sin() == null) {
-						hasNext = true;
-						dir = STOP;
-					} else {
+					if (curr.sin() == null) dir = STOP;
+					else {
 						curr = curr.sin();
 						dir = SIN;
 					}
@@ -117,11 +114,144 @@ public class AlberoBinLF<T> extends AlberoLF<T> implements AlberoBin<T> {
 					} else {
 						if (((AlberoBin<T>)curr.padre()).sin() == curr) {
 							curr = (AlberoBin<T>)curr.padre();
-							hasNext = true;
 							dir = STOP;
 						} else {
 							curr = (AlberoBin<T>)curr.padre();
 							dir = SU;
+						}
+					}
+					break;
+				}
+			}	
+		}		
+	}
+
+	public Iterator<T> iteratorVPre() {
+		return new IteratorVPre(this);
+	}
+
+	protected class IteratorVPre implements Iterator<T> {
+
+		protected static final int SIN = 0;
+		protected static final int DES = 1;
+		protected static final int SU = 2;
+		protected static final int STOP = 3;
+		
+		protected AlberoBin<T> curr;
+		protected boolean hasNext;
+		
+		public IteratorVPre(AlberoBin<T> a) {
+			curr = a;
+			hasNext = true;
+		}
+
+		public boolean hasNext() { return hasNext; }
+
+		public T next() {
+			if (!hasNext()) return null;
+			T tmp = curr.val();
+			succ();
+			return tmp;
+		}
+
+		public void remove() { throw new UnsupportedOperationException(); }
+
+		private void succ() {
+			int dir = SIN;
+			while (dir != STOP) {
+				switch (dir) {
+				case DES:
+					if (curr.des() == null) dir = SU;
+					else {
+						curr = curr.des();
+						dir = STOP;
+					}
+					break;
+				case SIN:
+					if (curr.sin() == null) dir = DES;
+					else {
+						curr = curr.sin();
+						dir = STOP;
+					}
+					break;
+				case SU:
+					if (curr.padre() == null) {
+						hasNext = false;
+						dir = STOP;
+					} else {
+						if (((AlberoBin<T>)curr.padre()).sin() == curr) {
+							curr = (AlberoBin<T>)curr.padre();
+							dir = DES;
+						} else {
+							curr = (AlberoBin<T>)curr.padre();
+							dir = SU;
+						}
+					}
+					break;
+				}
+			}	
+		}		
+	}
+
+	public Iterator<T> iteratorVPost() {
+		return new IteratorVPost(this);
+	}
+
+	protected class IteratorVPost implements Iterator<T> {
+
+		protected static final int SIN = 0;
+		protected static final int DES = 1;
+		protected static final int SU = 2;
+		protected static final int STOP = 3;
+		
+		protected AlberoBin<T> curr;
+		protected boolean hasNext;
+		
+		public IteratorVPost(AlberoBin<T> a) {
+			curr = a;
+			hasNext = true;
+		}
+
+		public boolean hasNext() { return hasNext; }
+
+		public T next() {
+			if (!hasNext()) return null;
+			T tmp = curr.val();
+			succ();
+			return tmp;
+		}
+
+		public void remove() { throw new UnsupportedOperationException(); }
+
+		private void succ() {
+			int dir = SU;
+			while (dir != STOP) {
+				switch (dir) {
+				case DES:
+					if (curr.des() == null) dir = STOP;
+					else {
+						curr = curr.des();
+						dir = SIN;
+					}
+					break;
+				case SIN:
+					if (curr.sin() == null) dir = DES;
+					else {
+						curr = curr.sin();
+						dir = SIN;
+					}
+					break;
+				case SU:
+					if (curr.padre() == null) {
+						hasNext = false;
+						dir = STOP;
+					} else {
+						if (((AlberoBin<T>)curr.padre()).sin() == curr) {
+							curr = (AlberoBin<T>)curr.padre();
+							dir = DES;
+						} else {
+							curr = (AlberoBin<T>)curr.padre();
+							dir = STOP;
 						}
 					}
 					break;
