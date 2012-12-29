@@ -17,34 +17,14 @@ public class AlberoBinLF<T> extends AlberoLF<T> implements AlberoBin<T> {
 	public AlberoBinLF(T val) { super(2, val); }
 
 	@SuppressWarnings("unchecked")
-	public AlberoBin<T> padreBin() {
-		return (AlberoBin<T>)padre;
-	}
+	public AlberoBin<T> padreBin() { return (AlberoBin<T>)padre; }
 
-	public AlberoBin<T> sin() {
-		return (AlberoBin<T>)figlio(0);
-	}
+	public AlberoBin<T> sin() { return (AlberoBin<T>)figlio(0); }
+	public void setSin(AlberoBin<T> a) { setFiglio(a, 0); }
 
-	public AlberoBin<T> des() {
-		return (AlberoBin<T>)figlio(1);
-	}
-
-	public void setDes(AlberoBinLF<T> a) {
-		try {
-			setFiglio(a, 1);
-		} catch (AlberiDiversiException e) {
-			e.printStackTrace();
-		}
-	}
+	public AlberoBin<T> des() { return (AlberoBin<T>)figlio(1); }
+	public void setDes(AlberoBin<T> a) { setFiglio(a, 1); }
 	
-	public void setSin(AlberoBinLF<T> a) {
-		try {
-			setFiglio(a, 0);
-		} catch (AlberiDiversiException e) {
-			e.printStackTrace();
-		}
-	}
-
 	public List<T> visitaInfissa() {
 		List<T> l = new LinkedList<T>();
 		visitaInfissa(l);
@@ -54,7 +34,7 @@ public class AlberoBinLF<T> extends AlberoLF<T> implements AlberoBin<T> {
 	private void visitaInfissa(List<T> l){
 		AlberoBinLF<T> s = (AlberoBinLF<T>)sin();
 		if (s != null) s.visitaInfissa(l);
-		l.add(val());
+		l.add(val);
 		AlberoBinLF<T> d = (AlberoBinLF<T>)des();
 		if (d != null) d.visitaInfissa(l);
 	}
@@ -113,10 +93,10 @@ public class AlberoBinLF<T> extends AlberoLF<T> implements AlberoBin<T> {
 						dir = STOP;
 					} else {
 						if (((AlberoBin<T>)curr.padre()).sin() == curr) {
-							curr = (AlberoBin<T>)curr.padre();
+							curr = curr.padreBin();
 							dir = STOP;
 						} else {
-							curr = (AlberoBin<T>)curr.padre();
+							curr = curr.padreBin();
 							dir = SU;
 						}
 					}
@@ -180,10 +160,10 @@ public class AlberoBinLF<T> extends AlberoLF<T> implements AlberoBin<T> {
 						dir = STOP;
 					} else {
 						if (((AlberoBin<T>)curr.padre()).sin() == curr) {
-							curr = (AlberoBin<T>)curr.padre();
+							curr = curr.padreBin();
 							dir = DES;
 						} else {
-							curr = (AlberoBin<T>)curr.padre();
+							curr = curr.padreBin();
 							dir = SU;
 						}
 					}
@@ -247,10 +227,10 @@ public class AlberoBinLF<T> extends AlberoLF<T> implements AlberoBin<T> {
 						dir = STOP;
 					} else {
 						if (((AlberoBin<T>)curr.padre()).sin() == curr) {
-							curr = (AlberoBin<T>)curr.padre();
+							curr = curr.padreBin();
 							dir = DES;
 						} else {
-							curr = (AlberoBin<T>)curr.padre();
+							curr = curr.padreBin();
 							dir = STOP;
 						}
 					}

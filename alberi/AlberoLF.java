@@ -11,27 +11,30 @@ import alberi.eccezioni.AlberiDiversiException;
 public class AlberoLF<T> implements Albero<T> {
 
 	protected int numMaxFigli;
-	protected Vettore<AlberoLF<T>> figli;
-	protected AlberoLF<T> padre = null;
+	protected Vettore<Albero<T>> figli;
+	protected Albero<T> padre = null;
 	protected int posFiglio = -1;
 	protected T val = null;
 
 	public AlberoLF(int numMaxFigli) {
 		this.numMaxFigli = numMaxFigli;
-		figli = new Vettore<AlberoLF<T>>(numMaxFigli);
+		figli = new Vettore<Albero<T>>(numMaxFigli);
 	}
 
 	public AlberoLF(int numMaxFigli, T val) {
 		this.numMaxFigli = numMaxFigli;
-		figli = new Vettore<AlberoLF<T>>(numMaxFigli);
+		figli = new Vettore<Albero<T>>(numMaxFigli);
 		this.val = val;
 	}
 
 	public T val() { return val; }
-	
 	public void setVal(T val) { this.val = val; }
 
 	public Albero<T> padre() { return padre; }
+	public void setPadre(Albero<T> p) { padre = p; }
+
+	public int pos() { return posFiglio; }
+	public void setPos(int p) { posFiglio = p; }
 
 	public Albero<T> figlio(int pos) {
 		if ((pos >= numMaxFigli) || (pos < 0))
@@ -47,32 +50,32 @@ public class AlberoLF<T> implements Albero<T> {
 
 	public int gradoMax() { return numMaxFigli; }
 
-	public boolean setFiglio(AlberoLF<T> a, int pos) throws AlberiDiversiException {
+	public void setFiglio(Albero<T> a, int pos) {
 		if ((pos >= numMaxFigli) || (pos < 0))
 			throw new ArrayIndexOutOfBoundsException();
-		if (a == null) return true;
-		if (a.gradoMax() != gradoMax())
-			throw new AlberiDiversiException();
-		if (figlio(pos) != null) return false;
+		if (a == null) return;
+		if (a.gradoMax() != gradoMax()) throw new AlberiDiversiException();
 		figli.set(pos, a);
-		a.padre = this;
-		a.posFiglio = pos;
-		return true;
+		a.setPadre(this);
+		a.setPos(pos);
+	}
+
+	public void rimuoviFiglio(int pos) {
+		Albero<T> figlio = figli.get(pos);
+		figlio.setPadre(null);
+		figlio.setPos(-1);
+		figli.remove(pos);
 	}
 
 	public void pota() {
-		if (padre != null) {
-			padre.figli.remove(posFiglio);
-			padre = null;
-			posFiglio = -1;
-		}
+		if (padre != null) padre.rimuoviFiglio(posFiglio);
 	}
 
 	protected class IteratorFigli implements Iterator<Albero<T>> {
 
-		protected Iterator<AlberoLF<T>> it;
+		protected Iterator<Albero<T>> it;
 
-		public IteratorFigli(Iterator<AlberoLF<T>> it) {
+		public IteratorFigli(Iterator<Albero<T>> it) {
 			this.it = it;
 		}
 
@@ -107,7 +110,7 @@ public class AlberoLF<T> implements Albero<T> {
 	private void visitaPosticipata(List<T> l) {
 		Iterator<Albero<T>> it = figli();
 		while (it.hasNext())
-			((AlberoLF<T>)it.next()).visitaAnticipata(l);
+			((AlberoLF<T>)it.next()).visitaPosticipata(l);
 		l.add(val());
 	}
 

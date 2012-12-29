@@ -10,10 +10,24 @@ import java.util.List;
 public interface Albero<T> {
 	
 	public T val();
+
+	public void setVal(T val);
 	
 	public Albero<T> padre();
+
+	public void setPadre(Albero<T> p);
+
+	public int pos();
+
+	public void setPos(int p);
 	
 	public Albero<T> figlio(int pos);
+
+	public void setFiglio(Albero<T> a, int pos);
+
+	public void rimuoviFiglio(int pos);
+
+	public void pota();
 	
 	public Iterator<Albero<T>> figli();
 	

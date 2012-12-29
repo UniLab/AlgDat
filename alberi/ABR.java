@@ -13,19 +13,16 @@ public class ABR<T extends Comparable<? super T>> implements Dizionario<T> {
 	public ABR() { }
 
 	public void inserisci(T x) {
-		AlberoBin<T> tmp = cercaNodo(x);
-		if (tmp == null) {
+		AlberoBin<T> padre = cercaNodo(x);
+		if (padre == null) {
 			// inserisco la radice
 			coll = new AlberoBinLF<T>();
-			((AlberoBinLF<T>)coll).setVal(x);
-		} else if (!tmp.val().equals(x)) {
+			coll.setVal(x);
+		} else if (!padre.val().equals(x)) {
 			AlberoBinLF<T> figlio = new AlberoBinLF<T>();
 			figlio.setVal(x);
-			if (x.compareTo(tmp.val()) < 0) {
-				((AlberoBinLF<T>)tmp).setSin(figlio);
-			} else {
-				((AlberoBinLF<T>)tmp).setDes(figlio);
-			}
+			if (x.compareTo(padre.val()) < 0) padre.setSin(figlio);
+			else padre.setDes(figlio);
 		}
 	}
 
@@ -36,7 +33,7 @@ public class ABR<T extends Comparable<? super T>> implements Dizionario<T> {
 			rimuoviNodo(curr);
 		else {
 			AlberoBin<T> curr2 = max(curr.sin());
-			((AlberoBinLF<T>)curr).setVal(curr2.val());
+			curr.setVal(curr2.val());
 			rimuoviNodo(curr2);
 		}
 	}
@@ -47,12 +44,12 @@ public class ABR<T extends Comparable<? super T>> implements Dizionario<T> {
 	}
 
 	protected void rimuoviNodo(AlberoBin<T> a) {
-		if (a.grado() == 0) ((AlberoBinLF<T>)a).pota();
+		if (a.grado() == 0) a.pota();
 		else {
-			AlberoBinLF<T> figlio = (AlberoBinLF<T>)(a.sin() == null ? a.des() : a.sin());
-			AlberoBinLF<T> padre = (AlberoBinLF<T>)((AlberoBinLF<T>)a.padre());
-			int pos = ((AlberoBinLF<T>)a).posFiglio;
-			((AlberoBinLF<T>)a).pota(); figlio.pota();
+			AlberoBin<T> figlio = (a.sin() == null ? a.des() : a.sin());
+			AlberoBin<T> padre = a.padreBin();
+			int pos = a.pos();
+			a.pota(); figlio.pota();
 			padre.setFiglio(figlio, pos);
 		}
 	}
