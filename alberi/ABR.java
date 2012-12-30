@@ -50,7 +50,8 @@ public class ABR<T extends Comparable<? super T>> implements Dizionario<T> {
 			AlberoBin<T> padre = a.padreBin();
 			int pos = a.pos();
 			a.pota(); figlio.pota();
-			padre.setFiglio(figlio, pos);
+			if (padre != null) padre.setFiglio(figlio, pos);
+			else coll = figlio;
 		}
 	}
 

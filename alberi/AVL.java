@@ -36,7 +36,6 @@ public class AVL<T extends Comparable<? super T>> extends ABR<T> {
 						a.setBil(2);
 						a = ruota(a);
 						var = 0;
-						break;
 				}
 			} else {
 				switch (a.bil()) {
@@ -51,7 +50,6 @@ public class AVL<T extends Comparable<? super T>> extends ABR<T> {
 					case 1:
 						a.setBil(0);
 						var = 0;
-						break;
 				}
 			}
 			pos = a.pos();
