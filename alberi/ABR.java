@@ -44,15 +44,13 @@ public class ABR<T extends Comparable<? super T>> implements Dizionario<T> {
 	}
 
 	protected void rimuoviNodo(AlberoBin<T> a) {
-		if (a.grado() == 0) a.pota();
-		else {
-			AlberoBin<T> figlio = (a.sin() == null ? a.des() : a.sin());
-			AlberoBin<T> padre = a.padreBin();
-			int pos = a.pos();
-			a.pota(); figlio.pota();
-			if (padre != null) padre.setFiglio(figlio, pos);
-			else coll = figlio;
-		}
+		AlberoBin<T> figlio = (a.sin() == null ? a.des() : a.sin());
+		AlberoBin<T> padre = a.padreBin();
+		int pos = a.pos();
+		a.pota();
+		if (figlio != null) figlio.pota();
+		if (padre != null) padre.setFiglio(figlio, pos);
+		else coll = figlio;
 	}
 
 	public T cerca(T x) {

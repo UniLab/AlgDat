@@ -85,6 +85,7 @@ public class AVL<T extends Comparable<? super T>> extends ABR<T> {
 					case -1:
 						a.setBil(-2);
 						a = ruota(a);
+						if (a.bil() == 1) var = 0;
 						break;
 					case 0:
 						a.setBil(-1);
@@ -105,6 +106,7 @@ public class AVL<T extends Comparable<? super T>> extends ABR<T> {
 					case 1:
 						a.setBil(2);
 						a = ruota(a);
+						if (a.bil() == -1) var = 0;
 				}
 			}
 			pos = a.pos();
