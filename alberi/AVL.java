@@ -15,7 +15,7 @@ public class AVL<T extends Comparable<? super T>> extends ABR<T> {
 			figlio.setVal(x);
 			if (x.compareTo(padre.val()) < 0) padre.setSin(figlio);
 			else padre.setDes(figlio);
-			int pos = figlio.pos(), var = 1;
+			int pos = figlio.pos();
 			aggiustaInserimento((AlberoBinLFB<T>)padre, pos);
 		}
 	}
