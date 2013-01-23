@@ -31,6 +31,11 @@ public class Grafi {
 		return numComponenti;
 	}
 
+	public static boolean connessoEAciclico(Grafo g) {
+		// Per grafi non orientati
+		return (g.getM() == g.getN() - 1) && eConnesso(g);
+	}
+
 	public static boolean eFortementeConnesso(Grafo g) {
 		// Per grafi orientati
 		return numComponentiFortementeConnesse(g) == 1;
