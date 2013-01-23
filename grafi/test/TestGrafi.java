@@ -11,6 +11,34 @@ import grafi.*;
 public class TestGrafi {
 
 	public static void main(String[]args) {
+/**/
+		Grafo<Arco> g = new GrafoLista<Arco>(12);
+		g.aggiungiArco(new Arco(0,1));
+		g.aggiungiArco(new Arco(0,8));
+		g.aggiungiArco(new Arco(0,10));
+		g.aggiungiArco(new Arco(1,2));
+		g.aggiungiArco(new Arco(1,5));
+		g.aggiungiArco(new Arco(1,9));
+		g.aggiungiArco(new Arco(2,4));
+		g.aggiungiArco(new Arco(3,0));
+		g.aggiungiArco(new Arco(3,2));
+		g.aggiungiArco(new Arco(3,4));
+		g.aggiungiArco(new Arco(4,7));
+		g.aggiungiArco(new Arco(4,11));
+		g.aggiungiArco(new Arco(5,1));
+		g.aggiungiArco(new Arco(5,2));
+		g.aggiungiArco(new Arco(5,11));
+		g.aggiungiArco(new Arco(6,0));
+		g.aggiungiArco(new Arco(6,3));
+		g.aggiungiArco(new Arco(6,11));
+		g.aggiungiArco(new Arco(8,6));
+		g.aggiungiArco(new Arco(8,9));
+		g.aggiungiArco(new Arco(9,1));
+		g.aggiungiArco(new Arco(9,7));
+		g.aggiungiArco(new Arco(9,10));
+
+		System.out.println("Numero componenti fortemente connesse: " + Grafi.numComponentiFortementeConnesse(g));
+/*
 		Grafo<Arco> g = new GrafoMA<Arco>(8);
 		g.aggiungiArco(new Arco(1,4));
 		g.aggiungiArco(new Arco(1,2));
@@ -24,6 +52,7 @@ public class TestGrafi {
 		int[] tempiEsecuzione = {4, 6, 3, 2, 10, 7, 12, 4};
 
 		System.out.println(Grafi.tempoEsecuzione(g, tempiEsecuzione));
+/*
 /*
 		Grafo<Arco> g = new GrafoMA<Arco>(5);
 		g.aggiungiArco(new Arco(0,1));

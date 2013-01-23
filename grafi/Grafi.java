@@ -10,6 +10,66 @@ public class Grafi {
 		// Per grafi non orientati
 		List<Integer> l = g.depthFirstSearch(0);
 		return l.size() == g.getN();
+		/* Oppure:
+		return numComponentiConnesse(g) == 1;
+		*/
+	}
+
+	public static int numComponentiConnesse(Grafo g) {
+		// Per grafi non orientati
+		boolean[] visitati = new boolean[g.getN()];
+		for (int i = 0; i < g.getN(); i++) visitati[i] = false;
+		boolean grafoVisitato = false;
+		int nodoPartenza = 0, numComponenti = 0;
+		while (!grafoVisitato) {
+			List<Integer> l = g.depthFirstSearch(nodoPartenza); // oppure breadthFirstSearch
+			numComponenti++;
+			while (!l.isEmpty()) visitati[l.remove(0)] = true;
+			while (nodoPartenza < g.getN() && visitati[nodoPartenza]) nodoPartenza++;
+			if (nodoPartenza == g.getN()) grafoVisitato = true;
+		}
+		return numComponenti;
+	}
+
+	public static boolean eFortementeConnesso(Grafo g) {
+		// Per grafi orientati
+		return numComponentiFortementeConnesse(g) == 1;
+	}
+
+	public static int numComponentiFortementeConnesse(Grafo g) {
+		// Per grafi orientati
+		int[] contatoreVisite = new int[1]; // Simula passaggio per riferimento
+		contatoreVisite[0] = 1;
+		int[] fuga = new int[g.getN()];
+		int[] indiceVisita = new int[g.getN()];
+		for (int i = 0; i < g.getN(); i++) fuga[i] = indiceVisita[i] = 0;
+		int numComponenti = 0;
+		Deque<Integer> pila = new LinkedList<Integer>();
+		for (int i = 0; i < g.getN(); i++)
+			if (indiceVisita[i] == 0)
+				numComponenti = visitaFortementeConnesse(g, i, numComponenti, contatoreVisite, fuga, indiceVisita, pila);
+		return numComponenti;
+	}
+
+	private static int visitaFortementeConnesse(Grafo g, int nodo, int numComponenti, int[] contatoreVisite, int[] fuga, int[] indiceVisita, Deque<Integer> pila) {
+		indiceVisita[nodo] = contatoreVisite[0]++;
+		fuga[nodo] = indiceVisita[nodo];
+		pila.addFirst(nodo);
+		Iterator<Arco> itAdiacenti = g.adiacenti(nodo);
+		while (itAdiacenti.hasNext()) {
+			int ad = itAdiacenti.next().getFin();
+			if (indiceVisita[ad] == 0) {
+				numComponenti = visitaFortementeConnesse(g, ad, numComponenti, contatoreVisite, fuga, indiceVisita, pila);
+				if (fuga[ad] < fuga[nodo]) fuga[nodo] = fuga[ad];
+			} else if (pila.contains(ad)) {
+				if (indiceVisita[ad] < fuga[nodo]) fuga[nodo] = indiceVisita[ad];
+			}
+		}
+		if (fuga[nodo] == indiceVisita[nodo]) {
+			numComponenti++;
+			while (pila.removeFirst() != nodo) ;
+		}
+		return numComponenti;
 	}
 
 	public static boolean aciclico(Grafo g) {
