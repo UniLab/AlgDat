@@ -9,6 +9,11 @@ public class Arco {
 		this.in = in;
 		this.fin = fin;
 	}
+
+	public Arco(Arco a) {
+		in = a.in;
+		fin = a.fin;
+	}
 	
 	public int getIn() { return in; }
 

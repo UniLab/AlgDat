@@ -1,6 +1,6 @@
 package grafi.test;
 
-import java.util.Iterator;
+import java.util.*;
 
 import grafi.*;
 
@@ -81,9 +81,16 @@ public class TestGrafi {
 		
 		System.out.println("\nVisita in profondità dal nodo 3: " + gp.depthFirstSearch(3));
 		System.out.println("Visita in ampiezza dal nodo 3: " + gp.breadthFirstSearch(3));
-		System.out.println("\nDistanze Dijkstra dal nodo 3: " + Grafi.dijkstra(gp, 3));
-		double[][] dist = Grafi.floydWarshall(gp);
-		System.out.println("\nDistanze Floyd-Warshall per ogni coppia di nodi:");
+		System.out.println("\nDistanze Dijkstra dal nodo 3: " + Arrays.toString(Grafi.dijkstra(gp, 3)));
+		double[][] dist = Grafi.distanzeMinimeDijkstra(gp);
+		System.out.println("\nDistanze minime Dijkstra per ogni coppia di nodi:");
+		for (int i = 0; i < 5; i++) {
+			for (int j = 0; j < 5; j++)
+				System.out.print(dist[i][j] + " ");
+			System.out.println();
+		}
+		dist = Grafi.distanzeMinimeFloydWarshall(gp);
+		System.out.println("\nDistanze minime Floyd-Warshall per ogni coppia di nodi:");
 		for (int i = 0; i < 5; i++) {
 			for (int j = 0; j < 5; j++)
 				System.out.print(dist[i][j] + " ");

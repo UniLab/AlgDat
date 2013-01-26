@@ -208,6 +208,12 @@ public class Grafi {
 		// Complessità (nell'ipotesi che l'ordinamento sia eseguito con costo O(m * log n)):
 		// 	Lista -> O(m * n)
 		// 	Matrice -> O(m * n^2)
+		// Utilizzando una struttura dati Union-Find (di tipo Quickfind con bilanciamento sulle union)
+		// al posto di eseguire una visita su "albero" è possibile verificare (con una find)
+		// se l'arco da inserire collega due alberi diversi oppure crea un ciclo, con costo O(1),
+		// e durante l'inserimento di un nuovo arco è sufficiente aggiornare la struttura
+		// con una union che ha complessità O(log n) ammortizzata sulle n-1 operazioni
+		// In questo caso la complessità sarebbe O(m * log n) [dovuta all'ordinamento]
 		ArcoPesato[] archi = generaArchiOrdinati(g);
 		int inseriti = 0;
 		GrafoLista<ArcoPesato> albero = new GrafoLista<ArcoPesato>(g.getN()); // Oppure GrafoMA<ArcoPesato>
@@ -258,13 +264,13 @@ public class Grafi {
 		ArcoPesato tmp = a[i]; a[i] = a[j]; a[j] = tmp;
 	}
 
-	public static List<Double> dijkstra(Grafo<ArcoPesato> g, int nodoPartenza) {
+	public static double[] dijkstra(Grafo<ArcoPesato> g, int nodoPartenza) {
 		// Ipotesi: g non contiene archi di peso negativo
 		// Complessità: O(n^2)
 		// Utilizzando un Heap di archi al posto dell'array distanze
 		// la complessità diventa O(m * log m) = O(m * log n)
 		// risparmiando le n ricerche del minimo a fronte di O(m) operazioni sull'Heap
-		Double[] distanze = new Double[g.getN()];
+		double[] distanze = new double[g.getN()];
 		boolean[] raggiunti = new boolean[g.getN()];
 		for (int i = 0; i < g.getN(); i++) {
 			distanze[i] = Double.POSITIVE_INFINITY;
@@ -296,12 +302,33 @@ public class Grafi {
 					minPeso = distanze[i];
 				}
 		}
-		return Arrays.asList(distanze);
+		return distanze;
 	}
 
-	public static double[][] floydWarshall(Grafo<ArcoPesato> g) {
+	public static double[][] distanzeMinimeDijkstra(Grafo<ArcoPesato> g) {
+		// Ipotesi: g non contiene archi di peso negativo
+		// Complessità O(n^3)
+		double[][] distanze = distanzeIniziali(g);
+		for (int i = 0; i < g.getN(); i++)
+			distanze[i] = dijkstra(g, i);
+		return distanze;
+	}
+
+	public static double[][] distanzeMinimeFloydWarshall(Grafo<ArcoPesato> g) {
 		// Ipotesi: g non contiene cicli negativi (altrimenti non esiste un albero dei cammini minimi)
 		// Complessità O(n^3)
+		double[][] distanze = distanzeIniziali(g);
+		// Costruisco i cammini minimi k-vincolati sfruttando la tecnica della programmazione dinamica
+		for (int k = 0; k < g.getN(); k++)
+			for (int i = 0; i < g.getN(); i++)
+				for (int j = 0; j < g.getN(); j++)
+					if (distanze[i][j] > distanze[i][k] + distanze[k][j])
+						distanze[i][j] = distanze[i][k] + distanze[k][j];
+		return distanze;
+	}
+
+	private static double[][] distanzeIniziali(Grafo<ArcoPesato> g) {
+		// Complessità: O(n^2 + m) = O(n^2)
 		double[][] distanze = new double[g.getN()][g.getN()];
 		for (int i = 0; i < g.getN(); i++)
 			for (int j = 0; j < g.getN(); j++)
@@ -312,13 +339,19 @@ public class Grafi {
 			ArcoPesato a = it.next();
 			distanze[a.getIn()][a.getFin()] = a.getPeso();
 		}
-		// Costruisco i cammini minimi k-vincolati sfruttando la tecnica della programmazione dinamica
+		return distanze;
+	}
+
+	public static void chiusuraTransitivaFloyd(Grafo<Arco> g, Grafo<Arco> gc) {
+		// Complessità: O(n^3)
+		for (int i = 0; i < g.getN(); i++) gc.aggiungiArco(new Arco(i, i));
+		Iterator<Arco> it = g.archi();
+		while (it.hasNext()) gc.aggiungiArco(new Arco(it.next()));
 		for (int k = 0; k < g.getN(); k++)
 			for (int i = 0; i < g.getN(); i++)
 				for (int j = 0; j < g.getN(); j++)
-					if (distanze[i][j] > distanze[i][k] + distanze[k][j])
-						distanze[i][j] = distanze[i][k] + distanze[k][j];
-		return distanze;
+					if (gc.arco(i, k) && gc.arco(k, j))
+						gc.aggiungiArco(new Arco(i, j));
 	}
 
 	/*
