@@ -209,7 +209,7 @@ public class Grafi {
 		// 	Lista -> O(m * n)
 		// 	Matrice -> O(m * n^2)
 		// Utilizzando una struttura dati Union-Find (di tipo Quickfind con bilanciamento sulle union)
-		// al posto di eseguire una visita su "albero" è possibile verificare (con una find)
+		// al posto di eseguire una visita su "albero" è possibile verificare (con due find)
 		// se l'arco da inserire collega due alberi diversi oppure crea un ciclo, con costo O(1),
 		// e durante l'inserimento di un nuovo arco è sufficiente aggiornare la struttura
 		// con una union che ha complessità O(log n) ammortizzata sulle n-1 operazioni
