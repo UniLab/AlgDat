@@ -151,7 +151,7 @@ public class Grafi {
 		// Per grafi orientati
 		// Ipotesi: g.getN() == gc.getN() e gc non contiene archi
 		// Complessità:
-		// 	Lista -> O(m * n)
+		// 	Lista -> O(n * (m + n))
 		// 	Matrice -> O(n^3)
 		List<Integer> visitati;
 		for (int i = 0; i < g.getN(); i++) {
