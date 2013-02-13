@@ -16,6 +16,23 @@ public class Grafi {
 		*/
 	}
 
+	public static boolean eAciclico(Grafo<? extends Arco> g) {
+		// Per grafi non orientati
+		// Complessità:
+		// 	Lista -> O(n)
+		// 	Matrice -> O(n^2)
+		if (g.getM() > g.getN() - 1) return false;
+		return g.getM() == (g.getN() - numComponentiConnesse(g));
+	}
+
+	public static boolean eConnessoAciclico(Grafo<? extends Arco> g) {
+		// Per grafi non orientati
+		// Complessità:
+		// 	Lista -> O(n)
+		// 	Matrice -> O(n^2)
+		return (g.getM() == g.getN() - 1) && eConnesso(g);
+	}
+
 	public static int numComponentiConnesse(Grafo<? extends Arco> g) {
 		// Per grafi non orientati
 		// Complessità pari al costo di visita del grafo
@@ -33,24 +50,46 @@ public class Grafi {
 		return numComponenti;
 	}
 
-	public static boolean connessoEAciclico(Grafo<? extends Arco> g) {
-		// Per grafi non orientati
-		// Complessità:
-		// 	Lista -> O(n)
-		// 	Matrice -> O(n^2)
-		return (g.getM() == g.getN() - 1) && eConnesso(g);
-	}
-
-	public static boolean eForesta(Grafo<? extends Arco> g) {
-		// Per grafi non orientati
-		// Complessità pari al costo di visita del grafo
-		return g.getM() == (g.getN() - numComponentiConnesse(g));
-	}
-
 	public static boolean eFortementeConnesso(Grafo<? extends Arco> g) {
 		// Per grafi orientati
 		// Complessità pari al costo di visita del grafo
 		return numComponentiFortementeConnesse(g) == 1;
+	}
+
+	public static boolean aciclico(Grafo<? extends Arco> g) {
+		// Per grafi orientati
+		// Complessità:
+		// 	Lista -> O(m)
+		// 	Matrice -> O(n^2)
+		int[] gradi = gradiDiEntrata(g);
+		boolean[] rimossi = new boolean[g.getN()];
+		LinkedList<Integer> daRimuovere = new LinkedList<Integer>();
+		for (int i = 0; i < gradi.length; i++)
+			if (gradi[i] == 0) daRimuovere.add(i);
+		while (!daRimuovere.isEmpty()) {
+			int nodo = daRimuovere.removeFirst();
+			rimossi[nodo] = true;
+			Iterator<? extends Arco> itAd = g.adiacenti(nodo);
+			while (itAd.hasNext()) {
+				int ad = itAd.next().getFin();
+				if (--gradi[ad] == 0 && !rimossi[ad]) daRimuovere.add(ad);
+			}
+		}
+		for (int i = 0; i < rimossi.length; i++)
+			if (!rimossi[i]) return false;
+		return true;
+	}
+
+	private static int[] gradiDiEntrata(Grafo<? extends Arco> g) {
+		// Complessità:
+		// 	Lista -> O(m)
+		// 	Matrice -> O(n^2)
+		int[] gradi = new int[g.getN()];
+		for (int i = 0; i < gradi.length; i++) gradi[i] = 0;
+		Iterator<? extends Arco> it = g.archi();
+		while (it.hasNext())
+			gradi[it.next().getFin()]++;
+		return gradi;
 	}
 
 	public static int numComponentiFortementeConnesse(Grafo<Arco> g, Grafo<Arco> gc) { 
@@ -109,42 +148,6 @@ public class Grafi {
 			while (pila.removeFirst() != nodo) ;
 		}
 		return numComponenti;
-	}
-
-	public static boolean aciclico(Grafo<? extends Arco> g) {
-		// Per grafi orientati
-		// Complessità:
-		// 	Lista -> O(m)
-		// 	Matrice -> O(n^2)
-		int[] gradi = gradiDiEntrata(g);
-		boolean[] rimossi = new boolean[g.getN()];
-		LinkedList<Integer> daRimuovere = new LinkedList<Integer>();
-		for (int i = 0; i < gradi.length; i++)
-			if (gradi[i] == 0) daRimuovere.add(i);
-		while (!daRimuovere.isEmpty()) {
-			int nodo = daRimuovere.removeFirst();
-			rimossi[nodo] = true;
-			Iterator<? extends Arco> itAd = g.adiacenti(nodo);
-			while (itAd.hasNext()) {
-				int ad = itAd.next().getFin();
-				if (--gradi[ad] == 0 && !rimossi[ad]) daRimuovere.add(ad);
-			}
-		}
-		for (int i = 0; i < rimossi.length; i++)
-			if (!rimossi[i]) return false;
-		return true;
-	}
-
-	private static int[] gradiDiEntrata(Grafo<? extends Arco> g) {
-		// Complessità:
-		// 	Lista -> O(m)
-		// 	Matrice -> O(n^2)
-		int[] gradi = new int[g.getN()];
-		for (int i = 0; i < gradi.length; i++) gradi[i] = 0;
-		Iterator<? extends Arco> it = g.archi();
-		while (it.hasNext())
-			gradi[it.next().getFin()]++;
-		return gradi;
 	}
 
 	public static void chiusuraTransitiva(Grafo<Arco> g, Grafo<Arco> gc) {
