@@ -11,7 +11,7 @@ public class ArcoPesato extends Arco {
 	
 	public double getPeso() { return peso; }
 
-	public void setIn(double peso) { this.peso = peso; }
+	public void setPeso(double peso) { this.peso = peso; }
 	
 	public String toString() {
 		return "[Arco pesato (" + in + "," + fin + "," + peso + ")]";
