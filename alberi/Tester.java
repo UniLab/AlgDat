@@ -87,7 +87,7 @@ public class Tester {
 	}
 
 	public static void main(String[] args) {
-/*
+/**/
 		AlberoBinLF<Integer> a =  new AlberoBinLF<Integer>();
 		a.setVal(new Integer(-1));
 		AlberoBinLF<Integer> a1 =  new AlberoBinLF<Integer>();
@@ -100,12 +100,27 @@ public class Tester {
 		a4.setVal(new Integer(-33));
 		AlberoBinLF<Integer> a5 =  new AlberoBinLF<Integer>();
 		a5.setVal(new Integer(4));
-		
+		AlberoBinLF<Integer> a6 =  new AlberoBinLF<Integer>();
+		a6.setVal(new Integer(5));
+		AlberoBinLF<Integer> a7 =  new AlberoBinLF<Integer>();
+		a7.setVal(new Integer(7));
+		AlberoBinLF<Integer> a8 =  new AlberoBinLF<Integer>();
+		a8.setVal(new Integer(8));
+		AlberoBinLF<Integer> a9 =  new AlberoBinLF<Integer>();
+		a9.setVal(new Integer(9));
+		AlberoBinLF<Integer> a10 =  new AlberoBinLF<Integer>();
+		a10.setVal(new Integer(10));
+
 		a.setSin(a1);
 		a.setDes(a2);
 		a1.setSin(a3);
+		a1.setDes(a6);
 		a3.setSin(a4);
 		a4.setDes(a5);
+		a6.setSin(a7);
+		a6.setDes(a8);
+		a2.setSin(a9);
+		a2.setDes(a10);
 		
 		System.out.println(verifica(a,2));
 /*
@@ -120,7 +135,7 @@ public class Tester {
 		a.inserisci(13);
 		
 		System.out.println(a.toString());
-/**/
+/*
 		AVL<Integer> a = new AVL<Integer>();
 		for (int i = 0; i < 10; i++) {
 			a.inserisci(i);

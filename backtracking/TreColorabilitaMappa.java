@@ -30,7 +30,7 @@ public class TreColorabilitaMappa extends ProblemaBack {
 	protected boolean succVal(int l) {
 		if (sol[l] == Colore.BLU) return false;
 		if (sol[l] == Colore.ROSSO) sol[l] = Colore.VERDE;
-		if (sol[l] == Colore.VERDE) sol[l] = Colore.BLU;
+		else if (sol[l] == Colore.VERDE) sol[l] = Colore.BLU;
 		return true;
 	}
 
